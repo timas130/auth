@@ -253,7 +253,7 @@ func (a *API) verifyPost(w http.ResponseWriter, r *http.Request, params *VerifyP
 		case mail.RecoveryVerification, mail.MagicLinkVerification:
 			user, terr = a.recoverVerify(r, tx, user)
 			// i don't know what to think anymore
-			if terr == nil {
+			if terr != nil {
 				user, terr = a.signupVerify(r, ctx, tx, user)
 			}
 		case mail.EmailChangeVerification:
