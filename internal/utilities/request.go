@@ -72,10 +72,10 @@ func GetReferrer(r *http.Request, config *conf.GlobalConfiguration) string {
 	}
 
 	// instead try referrer header value
-	reqref = r.Referer()
-	if IsRedirectURLValid(config, reqref) {
-		return reqref
-	}
+	//reqref = r.Referer()
+	//if IsRedirectURLValid(config, reqref) {
+	//	return reqref
+	//}
 
 	return config.SiteURL
 }
@@ -119,7 +119,7 @@ func IsRedirectURLValid(config *conf.GlobalConfiguration, redirectURL string) bo
 
 // getRedirectTo tries extract redirect url from header or from query params
 func getRedirectTo(r *http.Request) (reqref string) {
-	reqref = r.Header.Get("redirect_to")
+	reqref = r.Header.Get("x-redirect-to")
 	if reqref != "" {
 		return
 	}
