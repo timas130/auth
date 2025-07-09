@@ -31,6 +31,7 @@ func NewKeycloakProvider(ext conf.OAuthProviderConfiguration, scopes string) (OA
 	oauthScopes := []string{
 		"profile",
 		"email",
+		"openid",
 	}
 
 	if scopes != "" {
@@ -51,8 +52,8 @@ func NewKeycloakProvider(ext conf.OAuthProviderConfiguration, scopes string) (OA
 			ClientID:     ext.ClientID[0],
 			ClientSecret: ext.Secret,
 			Endpoint: oauth2.Endpoint{
-				AuthURL:  ext.URL + "/protocol/openid-connect/auth",
-				TokenURL: ext.URL + "/protocol/openid-connect/token",
+				AuthURL:  ext.URL + "/auth",
+				TokenURL: ext.URL + "/token",
 			},
 			RedirectURL: ext.RedirectURI,
 			Scopes:      oauthScopes,
@@ -68,7 +69,7 @@ func (g keycloakProvider) GetOAuthToken(code string) (*oauth2.Token, error) {
 func (g keycloakProvider) GetUserData(ctx context.Context, tok *oauth2.Token) (*UserProvidedData, error) {
 	var u keycloakUser
 
-	if err := makeRequest(ctx, tok, g.Config, g.Host+"/protocol/openid-connect/userinfo", &u); err != nil {
+	if err := makeRequest(ctx, tok, g.Config, g.Host+"/userinfo", &u); err != nil {
 		return nil, err
 	}
 
